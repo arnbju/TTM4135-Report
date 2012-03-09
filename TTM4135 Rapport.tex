@@ -13,6 +13,78 @@
 
 
 
+
+\section{Introduction}
+Litt introduksjon og sånn
+\section{Experimental}
+Her eksprimenterte vi med masse rart
+\section{Procedure}
+Dette var litt foskjelig
+\section{Results}
+Funka bra!
+\section{Discussion}
+
+\paragraph{Q1} 
+Comment on security related issues regarding the cryptographic algorithms used to
+generate and sign your groups web server certi?cate (key length, algorithm, etc.).
+\paragraph
+All the CAs provided by the staff are signed with a SHA1 hash, our ca uses a SHA256 key. Both uses a 2048bit key length. SHA1 is no longer recommended to use on digital signatures by NIST[4] because of an attack by Xiaoyun Wang[1] reducing the probability of a collision from 2 ^ 80 to 2 ^ 63 [2][3]. A key length of 2048 bits is considered secure until 2030 by NIST[5], 2020 by FNISA[6] and BSI[7]. The Durotation of the certificate is set to 365 days which is within the recommendations set by NIST[8].
+
+[1] Finding Collisions in the Full SHA-1Collision Search Attacks on SHA1
+	http://people.csail.mit.edu/yiqun/SHA1AttackProceedingVersion.pdf
+[2] http://www.schneier.com/blog/archives/2005/08/new_cryptanalyt.html	Droppe?, bruke [3]?
+[3] http://csrc.nist.gov/groups/ST/hash/statement.html
+[4] http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html
+[5] Trenger bedre ref en dette: http://www.keylength.com/en/
+[6] Trenger bedre ref en dette: http://www.keylength.com/en/
+[7] Trenger bedre ref en dette: http://www.keylength.com/en/
+[8]
+
+
+
+\paragraph{Q2} 
+Explain what you have achieved through each of these verifcations. What is the name
+of the person signing the Apache release?
+\paragraph{}
+Pretty Good Privacy (PGP) is a computer program that encrypt and decrypt data. It gives a  confidentiality and authentication service. The first version of this program was a web of trust system.
+\paragraph{}
+By verifying the source code whit the PGP program we ensure that the source code is the original code and that no one has tampered with it. The PGP program uses a private key and a public key. The private key is kept by the person wishing to authenticate it self and the public key is given to the people he wants to authenticate him self to. The sender signs a hash whit the private key. When an other person receives the data he can use the public key to check that the person is who he claims to be. 
+\paragraph{}
+PGP uses web of trust to ensure that the person signing the Aparch release is who he clams to be. A web of trust is a network were .
+\paragraph{Q3}
+What are the access permissions to your web server’s con?guration ?les, server certi?cate
+and the corresponding private key? Comment on possible attacks to your web server due to
+inappropriate ?le permissions
+\paragraph{}
+The web server should preferably be run by a user other than the one that owns the configuration files. This is not possible for us in this lab, since we don’t have the ability to create new users. If the web server has the opportunity to write to the configuration files, you can write a new configuration file that opens new security holes if you’re hacking into the web server. Our files have read and write access to the owner of the file, but no rights to the members of the group. However, this has nothing to say in this setup since we’re the only user in the group.
+\paragraph{Q4}
+Web servers o?ering weak cryptography are subject to several attacks. What kind of attacks are feasible? How did you con?gure your server to prevent such attacks?
+\paragraph{}
+By allowing weak ciphers and SSLv2 you are vulnerable to Man In The Middle Attack where the attacker changes the content of the Client Hello package. On our server we are only allowing SSLv3 and TLSv1 protocols with HIGH and MEDIUM ciphers as requried by PCI DSS [9] (Payment Card Industry Data Security Standarad)
+\paragraph{}
+[9] https://www.pcisecuritystandards.org/pdfs/navigating_pci_dss_v1-1.pdf
+
+\paragraph{Q5}
+What kind of malicious attacks is your web application (PHP) vulnerable to? Describe them brie?y, and point out what countermeasures you have developed in your code to prevent such attacks
+\paragraph{}
+Our web application is not vulnerable for sessions, since we’re not using it. Cross site scripting is avoided by using strip_tags in PHP on all user input. We have secured our web application against SQL injections, by using stripslashes and mysqli_real_escape_string commands in PHP on all input to databases. 
+
+\paragraph{Q6}
+Describe the security measures you have undertaken to secure your repository, and how did that a?ect the security of your Web Application (Better? Worse?). Elaborate on thepossible further measures, that can prevent certain types of attacks you found possible in the setting you created. Can you discover any vulnerabilities in the other groups’ projects? If so, try to mount attacks on other groups!
+\paragraph{}
+We’ve secured our subversion repository with htcaccess I, and the password is hashed with SHA. This doesn’t give further security alone, but combined with certificates from the /restricted folder you’ll get two component protection with something you got and something you know, certificate and password respectively. 
+\paragraph{}
+Some groups forgot to /secure the folder in the HTTP server, which gave us access to everything without certificates. Others forgot to set verify depth to 2 in apache http.conf. If it’s set to 4 or higher, which was the case for these groups, you can sign your own certificates with your own groups CA with their email as common name to gain access. 
+\paragraph{}
+Referanser:
+PGP: RFC4880 http://tools.ietf.org/html/rfc4880
+X.509: RFC4158 http://tools.ietf.org/html/rfc4158
+
+\section{Conclusion}
+Kult fag
+\section{Appendices}
+Her står det masse fin tekst
+
 \section{Litt notater}
 
 \paragraph{Q1:} 
@@ -73,84 +145,5 @@ Require valid-user
 Glemt å blokke /secure mappa i HTTP serveren, da får man tilgang til alt uten sertifikater
 Glemt å sette verify depth til 2 i apache httpd.conf, hvis den står til 4 eller høyere kan man signere sine egne sertifikater med sitt eget group CA og komme inn.
 
-\section{Introduction}
-Litt introduksjon og sånn
-\section{Experimental}
-Her eksprimenterte vi med masse rart
-\section{Procedure}
-Dette var litt foskjelig
-\section{Results}
-Funka bra!
-\section{Discussion}
-
-\paragraph
-Q1. Comment on security related issues regarding the cryptographic algorithms used to
-generate and sign your groups web server certi?cate (key length, algorithm, etc.).
-
-
-All the CAs provided by the staff are signed with a SHA1 hash, our ca uses a SHA256 key. Both uses a 2048bit key length. SHA1 is no longer recommended to use on digital signatures by NIST[4] because of an attack by Xiaoyun Wang[1] reducing the probability of a collision from 2 ^ 80 to 2 ^ 63 [2][3]. A key length of 2048 bits is considered secure until 2030 by NIST[5], 2020 by FNISA[6] and BSI[7]. The Durotation of the certificate is set to 365 days which is within the recommendations set by NIST[8].
-
-[1] Finding Collisions in the Full SHA-1Collision Search Attacks on SHA1
-	http://people.csail.mit.edu/yiqun/SHA1AttackProceedingVersion.pdf
-[2] http://www.schneier.com/blog/archives/2005/08/new_cryptanalyt.html	Droppe?, bruke [3]?
-[3] http://csrc.nist.gov/groups/ST/hash/statement.html
-[4] http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html
-[5] Trenger bedre ref en dette: http://www.keylength.com/en/
-[6] Trenger bedre ref en dette: http://www.keylength.com/en/
-[7] Trenger bedre ref en dette: http://www.keylength.com/en/
-[8]
-
-
-
-\paragraph
-Q2. Explain what you have achieved through each of these veri?cations. What is the name
-of the person signing the Apache release
-
-Pretty Good Privacy (PGP) is a computer program that encrypt and decrypt data. It gives a  confidentiality and authentication service. The first version of this program was a web of trust system.
-
-By verifying the source code whit the PGP program we ensure that the source code is the original code and that no one has tampered with it. The PGP program uses a private key and a public key. The private key is kept by the person wishing to authenticate it self and the public key is given to the people he wants to authenticate him self to. The sender signs a hash whit the private key. When an other person receives the data he can use the public key to check that the person is who he claims to be. 
-
-PGP uses web of trust to ensure that the person signing the Aparch release is who he clams to be. A web of trust is a network were .
-
-
-\paragraph
-Q3. What are the access permissions to your web server’s con?guration ?les, server certi?cate
-and the corresponding private key? Comment on possible attacks to your web server due to
-inappropriate ?le permissions
-
-The web server should preferably be run by a user other than the one that owns the configuration files. This is not possible for us in this lab, since we don’t have the ability to create new users. If the web server has the opportunity to write to the configuration files, you can write a new configuration file that opens new security holes if you’re hacking into the web server. Our files have read and write access to the owner of the file, but no rights to the members of the group. However, this has nothing to say in this setup since we’re the only user in the group.
-
-\paragraph
-Q4. Web servers o?ering weak cryptography are subject to several attacks. What kind of attacks are feasible? How did you con?gure your server to prevent such attacks?
-
-By allowing weak ciphers and SSLv2 you are vulnerable to Man In The Middle Attack where the attacker changes the content of the Client Hello package. On our server we are only allowing SSLv3 and TLSv1 protocols with HIGH and MEDIUM ciphers as requried by PCI DSS [9] (Payment Card Industry Data Security Standarad)
-
-[9] https://www.pcisecuritystandards.org/pdfs/navigating_pci_dss_v1-1.pdf
-
-\paragraph
-Q5. What kind of malicious attacks is your web application (PHP) vulnerable to? Describe
-them brie?y, and point out what countermeasures you have developed in your code to prevent
-such attacks
-
-Our web application is not vulnerable for sessions, since we’re not using it. Cross site scripting is avoided by using strip_tags in PHP on all user input. We have secured our web application against SQL injections, by using stripslashes and mysqli_real_escape_string commands in PHP on all input to databases. 
-
-\paragraph
-Q6 Describe the security measures you have undertaken to secure your repository, and
-how did that a?ect the security of your Web Application (Better? Worse?). Elaborate on thepossible further measures, that can prevent certain types of attacks you found possible in the
-setting you created. Can you discover any vulnerabilities in the other groups’ projects? If so,
-try to mount attacks on other groups!
-
-We’ve secured our subversion repository with htcaccess I, and the password is hashed with SHA. This doesn’t give further security alone, but combined with certificates from the /restricted folder you’ll get two component protection with something you got and something you know, certificate and password respectively. 
-
-Some groups forgot to /secure the folder in the HTTP server, which gave us access to everything without certificates. Others forgot to set verify depth to 2 in apache http.conf. If it’s set to 4 or higher, which was the case for these groups, you can sign your own certificates with your own groups CA with their email as common name to gain access. 
-
-Referanser:
-PGP: RFC4880 http://tools.ietf.org/html/rfc4880
-X.509: RFC4158 http://tools.ietf.org/html/rfc4158
-
-\section{Conclusion}
-Kult fag
-\section{Appendices}
-Her står det masse fin tekst
 
 \end{document}
