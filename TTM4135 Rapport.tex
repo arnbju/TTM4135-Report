@@ -1,0 +1,143 @@
+\documentclass[a4paper, norsk, 11pt]{report}
+\usepackage[latin1]{inputenc}
+\usepackage{babel}
+
+\author{Arne Dahl Bjune, Hanne Riise Mæhlum, Katarina Hokstad}
+\title{TTM4135 Informasjonssikkerhet Rapport}
+
+%\rhead{Topptekst}06.03.2012
+
+
+\begin{document}
+\maketitle
+
+
+\section{Part1: Certificate Authority}
+
+\subsection{Litt notater}
+
+\paragraph{Q1:} 
+Sertifikatet til vår webserver er signerert av vår CA. Den signerer med en SHA256 hash som er mye sikrere enn MD5 (som er er standard), 365 dager varighet på sertfikat
+Key length er 2048 bit, req er også sha256
+
+Key length studca også 2048bit, det står noe om anbefalt key lenght ut fra algoritme i foilene bassert på tall fra NSA, sikkert lurt å sitere det.
+
+
+\paragraph{Q2:} 
+Dette handler om at kildekoden vi laster ned ikke har blitt endret. Sikkert lurt å skrive litt om hvordan PGP (Prety good privacy) fungerer i forhold til CA, er totalt forskjelige tilnærminger til samme problem
+
+
+	
+
+Signert av (ser fornuftig ut i koden):
+\begin{quotation}
+gpg: Signature made Wed 25 Jan 2012 11:27:28 PM CET using RSA key ID 60C5442D
+gpg: Good signature from "William A. Rowe, Jr. <wrowe@rowe-clan.net>"
+gpg:                 aka "William A. Rowe, Jr. <wrowe@apache.org>"
+gpg:                 aka "William A. Rowe, Jr. <wrowe@vmware.com>"
+gpg:                 aka "William A. Rowe, Jr. <william.rowe@springsource.com>"
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: B1B9 6F45 DFBD CCF9 7401  9235 193F 180A B55D 9977
+     Subkey fingerprint: 627B E9D7 D7C6 9D30 A2F5  B008 5593 BCA9 60C5 442D
+\end{quotation}
+
+\subsection{Introduction}
+Litt introduksjon og sånn
+\subsection{Experimental}
+Her eksprimenterte vi med masse rart
+\subsection{Procedure}
+Dette var litt foskjelig
+\subsection{Results}
+Funka bra!
+\subsection{Discussion}
+Blabladblablablabla
+\subsection{Conclusion}
+Kult fag
+\subsection{Appendices}
+Her står det masse fin tekst
+
+\section{Part2: Access Control and Apache}
+
+\subsection{Litt Notater}
+\paragraph{Q3:} 
+Webserveren bør helst kjøres av en annen bruker en den som eier konfigurasjonsfilene. Det er ikke mulig for oss i denne laben sidne vi ikke har mulighet til å lage nye brukere. Hvis webserveren har mulighet til å skrive til config filene kan man når man hacker webserven skrive en ny config som åpner nye sikkerhetshull. Våre filer har lese og skriverettigheter til den som eier filene men ingen rettigheter til medlem av gruppa (det har ingenting å si siden i dette oppsettet er vi eneste bruker i gruppen).
+
+\subsection{Introduction}
+Litt introduksjon og sånn
+\subsection{Experimental}
+Her eksprimenterte vi med masse rart
+\subsection{Procedure}
+Dette var litt foskjelig
+\subsection{Results}
+Funka bra!
+\subsection{Discussion}
+Blabladblablablabla
+\subsection{Conclusion}
+Kult fag
+\subsection{Appendices}
+Her står det masse fin tekst
+
+\section{Part3: Writing PHP Application}
+\subsection{Litt Notater}
+Q5 Ikke sårbar for sessions siden vi ikke bruker det. Sårbar for Cross site scripting, ingenting gjort for å fikse det, ikke sikker på hvordan det funker. 
+Sikret mot SQL Injections (detaljer i tex koden):
+
+%\$username = stripslashes(\$username);
+%\$password = stripslashes(\$password);
+%\$username = mysqli_real_escape_string(\$connection,\$username);
+%\$password = mysqli_real_escape_string(\$connection,\$password);
+
+Hvis noen skulle få tilgang til databasen vår er passord lagret hashet med SHA256 og brukernavn som salt. Salt beskytter mot at alle passordene i databasen kan knekkes samtidig.
+
+
+
+
+
+
+\subsection{Introduction}
+Litt introduksjon og sånn
+\subsection{Experimental}
+Her eksprimenterte vi med masse rart
+\subsection{Procedure}
+Dette var litt foskjelig
+\subsection{Results}
+Funka bra!
+\subsection{Discussion}
+Blabladblablablabla
+\subsection{Conclusion}
+Kult fag
+\subsection{Appendices}
+Her står det masse fin tekst
+
+\section{Part4: Setting Up A Subversion Repository}
+
+\subsection{Litt notater}
+\paragraph{Q6:}  Subversion repository er sikkret med htaccess fil, passord hashet med SHA, gir ikke ytligere sikring alene (passord alene kan vel regnes som mer usikkert enn sertifikater, er ikke sikker) men hvis man kombinerer det med certifikatsikringen i fra /restricted mappa vil man få to komponent sikring, med noe man har (sertifikat) og noe vet (passord)
+\paragraph{Fra config fil}
+AuthType Basic
+AuthName "Subversion repository"
+AuthUserFile /home/gr10/subversion/repository/conf/svn-auth-file
+Require valid-user
+\paragraph{Sikkerhetshull hos andre grupper:} 
+
+Glemt å blokke /secure mappa i HTTP serveren, da får man tilgang til alt uten sertifikater
+Glemt å sette verify depth til 2 i apache httpd.conf, hvis den står til 4 eller høyere kan man signere sine egne sertifikater med sitt eget group CA og komme inn.
+
+
+\subsection{Introduction}
+Litt introduksjon og sånn
+\subsection{Experimental}
+Her eksprimenterte vi med masse rart
+\subsection{Procedure}
+Dette var litt foskjelig
+\subsection{Results}
+Funka bra!
+\subsection{Discussion}
+Blabladblablablabla
+\subsection{Conclusion}
+Kult fag
+\subsection{Appendices}
+Her står det masse fin tekst
+
+\end{document}
