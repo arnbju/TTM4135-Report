@@ -41,29 +41,13 @@ Primary key fingerprint: B1B9 6F45 DFBD CCF9 7401  9235 193F 180A B55D 9977
      Subkey fingerprint: 627B E9D7 D7C6 9D30 A2F5  B008 5593 BCA9 60C5 442D
 \end{quotation}
 
-\section{Introduction}
-Litt introduksjon og sånn
-\section{Experimental}
-Her eksprimenterte vi med masse rart
-\section{Procedure}
-Dette var litt foskjelig
-\section{Results}
-Funka bra!
-\section{Discussion}
-Blabladblablablabla
-\section{Conclusion}
-Kult fag
-\section{Appendices}
-Her står det masse fin tekst
 
 
-
-\section{Litt Notater}
 \paragraph{Q3:} 
 Webserveren bør helst kjøres av en annen bruker en den som eier konfigurasjonsfilene. Det er ikke mulig for oss i denne laben sidne vi ikke har mulighet til å lage nye brukere. Hvis webserveren har mulighet til å skrive til config filene kan man når man hacker webserven skrive en ny config som åpner nye sikkerhetshull. Våre filer har lese og skriverettigheter til den som eier filene men ingen rettigheter til medlem av gruppa (det har ingenting å si siden i dette oppsettet er vi eneste bruker i gruppen).
 
 
-\section{Litt Notater}
+
 Q5 Ikke sårbar for sessions siden vi ikke bruker det. Sårbar for Cross site scripting, ingenting gjort for å fikse det, ikke sikker på hvordan det funker. 
 Sikret mot SQL Injections (detaljer i tex koden):
 
@@ -78,8 +62,6 @@ Hvis noen skulle få tilgang til databasen vår er passord lagret hashet med SHA25
 
 
 
-
-\section{Litt notater}
 \paragraph{Q6:}  Subversion repository er sikkret med htaccess fil, passord hashet med SHA, gir ikke ytligere sikring alene (passord alene kan vel regnes som mer usikkert enn sertifikater, er ikke sikker) men hvis man kombinerer det med certifikatsikringen i fra /restricted mappa vil man få to komponent sikring, med noe man har (sertifikat) og noe vet (passord)
 \paragraph{Fra config fil}
 AuthType Basic
@@ -90,6 +72,21 @@ Require valid-user
 
 Glemt å blokke /secure mappa i HTTP serveren, da får man tilgang til alt uten sertifikater
 Glemt å sette verify depth til 2 i apache httpd.conf, hvis den står til 4 eller høyere kan man signere sine egne sertifikater med sitt eget group CA og komme inn.
+
+\section{Introduction}
+Litt introduksjon og sånn
+\section{Experimental}
+Her eksprimenterte vi med masse rart
+\section{Procedure}
+Dette var litt foskjelig
+\section{Results}
+Funka bra!
+\section{Discussion}
+Blabladblablablabla
+\section{Conclusion}
+Kult fag
+\section{Appendices}
+Her står det masse fin tekst
 
 
 \section{Appendices}
