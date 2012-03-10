@@ -22,11 +22,11 @@ Group 10}
 
 \section{Introduction}
 \url{https://www.pcisecuritystandards.org/pdfs/navigating_pci_dss_v1-1.pdf}
-Litt introduksjon og sånn \ref{sec:b}
+Litt introduksjon og sånn 
 \section{Experimental Procedure}
 Her eksprimenterte vi med masse rart
-\section{Results} \label{sec:b}
-Funka bra!
+\section{Results} 
+Funka bra! ~[\ref{appa}] 
 \section{Discussion}
 
 \paragraph{Q1} 
@@ -92,95 +92,15 @@ Kult fag
 \appendix
 \appendixpage
 
-\section{OpenSSL CA Config} \label{sec:a}
+\section{OpenSSL CA Config} \label{appa}
+\input{caconf}
 
-\begin{lstlisting}
+\section{Singup PHP} \label{appa}
+\input{signup}
 
-# OpenSSL configuration file.
+\section{Apache Group Config} \label{appa}
+\input{group}
 
-# Establish working directory.
-
-dir			= .
-
-[ ca ]
-default_ca		= CA_default
-
-[ CA_default ]
-serial			= $dir/serial
-database		= $dir/index.txt
-new_certs_dir		= $dir/newcerts
-certificate		= $dir/cacert.pem
-private_key		= $dir/cakey.key
-default_days		= 365
-default_md		= sha256
-preserve		= no
-email_in_dn		= no
-nameopt			= default_ca
-certopt			= default_ca
-policy			= policy_match
-ca_extensions		= server_cert
-
-[ policy_match ]
-countryName		= match
-organizationName	= match
-organizationalUnitName	= match
-commonName		= supplied
-
-
-[ req ]
-default_bits		= 2048		# Size of keys
-default_keyfile		= key.pem	# name of generated keys
-default_md		= sha256	# message digest algorithm
-string_mask		= utf8only	# permitted characters
-distinguished_name	= req_distinguished_name
-req_extensions		= v3_req
-
-[ req_distinguished_name ]
-# Variable name		  Prompt string
-#----------------------	  ----------------------------------
-0.organizationName	= Organization Name (company)
-organizationalUnitName	= Department
-countryName		= Country Name (2 letter code)
-countryName_min		= 2
-countryName_max		= 2
-commonName		= Common Name (stud.ntnu.no mailadress)
-commonName_max		= 64
-
-# Default values for the above, for consistency and less typing.
-# Variable name			  Value
-#------------------------------	  ------------------------------
-0.organizationName_default	= NORGES TEKNISK-NATURVITENSKAPELIGE \
-				UNIVERSITET NTNU
-organizationalUnitName_default	= Telematics
-countryName_default		= NO
-
-[ v3_ca ]
-basicConstraints	= CA:TRUE
-subjectKeyIdentifier	= hash
-authorityKeyIdentifier	= keyid:always,issuer:always
-
-[ v3_req ]
-basicConstraints	= CA:FALSE
-subjectKeyIdentifier	= hash
-
-[ server_cert ] # to sign the Apache CSR
-basicConstraints	= critical, CA:FALSE
-subjectKeyIdentifier	= hash
-keyUsage		= digitalSignature, keyEncipherment
-nsCertType		= server
-
-
-
-\end{lstlisting}
-
-\section{Appendix Second}
-ppendix second content.
-
-
-
-\begin{lstlisting}
-	\lstinputlisting{signup.php}
-\end{lstlisting}
 
 
 \section{Litt notater}
