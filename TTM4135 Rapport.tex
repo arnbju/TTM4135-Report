@@ -9,21 +9,23 @@
 \title{TTM4135 Informasjonssikkerhet Rapport\\
 Group 10}
 
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2ex}
+
 %\rhead{Topptekst}06.03.2012
 
 
 \begin{document}
 \maketitle
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{2ex}
+\tableofcontents
 
 
 \section{Introduction}
 \url{https://www.pcisecuritystandards.org/pdfs/navigating_pci_dss_v1-1.pdf}
-Litt introduksjon og sånn
+Litt introduksjon og sånn \ref{sec:b}
 \section{Experimental Procedure}
 Her eksprimenterte vi med masse rart
-\section{Results}
+\section{Results} \label{sec:b}
 Funka bra!
 \section{Discussion}
 
@@ -90,7 +92,8 @@ Kult fag
 \appendix
 \appendixpage
 
-\section{OpenSSL CA Config}
+\section{OpenSSL CA Config} \label{sec:a}
+
 \begin{lstlisting}
 
 # OpenSSL configuration file.
