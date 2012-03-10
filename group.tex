@@ -1,0 +1,97 @@
+\begin{lstlisting}
+
+SSLProtocol -ALL +SSLv3 +TLSv1
+SSLCipherSuite HIGH:MEDIUM
+
+<FilesMatch \.php$>
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+NameVirtualHost *:8190
+<VirtualHost *:8190>
+ServerAdmin arnedab@stud.ntnu.no
+DocumentRoot /home/gr10/apache/htdocs
+ServerName ttm4135.item.ntnu.no
+<Directory /home/gr10/apache/htdocs>
+Allow from all
+</Directory>
+
+<Directory /home/gr10/apache/htdocs/secure>
+Deny from all
+</Directory>
+
+
+</VirtualHost>
+
+Listen 8199
+
+NameVirtualHost *:8199
+<VirtualHost *:8199>
+ServerAdmin arnedab@stud.ntnu.no
+DocumentRoot /home/gr10/apache/htdocs/secure
+ServerName ttm4135.item.ntnu.no:8199
+
+
+SSLEngine on
+SSLCertificateFile 	/home/gr10/apache/servercert/apache_public.pem
+SSLCertificateKeyFile	/home/gr10/apache/servercert/apache_private.key
+SSLCertificateChainFile	/home/gr10/apache/servercert/group_chain.pem
+
+<Directory /home/gr10/apache/htdocs/secure/restricted>
+
+SSLVerifyClient 	require
+SSLVerifyDepth		2 
+SSLRequireSSL	
+SSLOptions 		+StdEnvVars
+SSLRequire 		%{SSL_CLIENT_S_DN_O}  eq "NORGES TEKNISK-NATURVITENSKAPELIGE UNIVERSITET NTNU" \
+		and 	%{SSL_CLIENT_S_DN_OU} eq "Telematics" \
+		and	%{SSL_CLIENT_S_DN_CN} in {"arnedab@stud.ntnu.no","hannerii@stud.ntnu.no","katarh@stud.ntnu"} \
+		and	%{SSL_CLIENT_I_DN_CN} eq "Student CA" \
+		|| 	%{SSL_CLIENT_I_DN_CN} eq "Staff CA"
+
+SSLCACertificateFile /home/gr10/apache/servercert/ntnuca.pem
+
+</Directory>
+
+<Directory /home/gr10/apache/htdocs/secure>
+	Options FollowSymLinks
+	AllowOverride None
+</Directory>
+
+<Directory /home/gr10/apache/htdocs/secure/admin>
+SSLVerifyClient         require
+SSLVerifyDepth          2
+SSLRequireSSL
+SSLOptions              +StdEnvVars
+SSLRequire              %{SSL_CLIENT_S_DN_O}  eq "NORGES TEKNISK-NATURVITENSKAPELIGE UNIVERSITET NTNU" \
+               and      %{SSL_CLIENT_S_DN_OU} eq "Telematics"
+
+SSLCACertificateFile /home/gr10/apache/servercert/ntnuca.pem
+
+
+</Directory>
+
+<Location /subversion>
+
+DAV svn
+SVNPath /home/gr10/subversion/repository/
+AuthType Basic
+AuthName "Subversion repository"
+AuthUserFile /home/gr10/subversion/repository/conf/svn-auth-file
+Require valid-user
+
+
+SSLVerifyClient 	require
+SSLVerifyDepth		2 
+SSLRequireSSL	
+SSLOptions 		+StdEnvVars
+SSLRequire 		%{SSL_CLIENT_S_DN_O}  eq "NORGES TEKNISK-NATURVITENSKAPELIGE UNIVERSITET NTNU" \
+		and 	%{SSL_CLIENT_S_DN_OU} eq "Telematics" \
+		and	%{SSL_CLIENT_S_DN_CN} in {"arnedab@stud.ntnu.no","hannerii@stud.ntnu.no","katarh@stud.ntnu"} \
+		and	%{SSL_CLIENT_I_DN_CN} eq "Student CA"
+
+</Location>
+
+</VirtualHost>
+
+\end{lstlisting}
