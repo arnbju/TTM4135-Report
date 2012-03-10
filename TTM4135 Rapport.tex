@@ -21,14 +21,14 @@ The purpose of this project was to experiment with web server security implement
 The project focuses on security mechanisms in web security software like web servers (Apache), static and dynamic web pages (PHP), browsers and session/application layer security (SSL). This was accomplished by using OpenSSL to create our own certificate authority (CA), which thereafter was used to create a signed certificate and private key for our Apache web server. To secure the web server it was necessary to change the configurations and implement client certificate authentication on our Apache web server. To validate clients we wrote a web site in PHP which used username, password and X.509 certificates. Finally, we used the Apache server to set up a Subversion Repository (SVN).
 
 \section{Results}
-Funka bra!
+We started with generating client certificates and getting them signed by the Stud CA, and ended up with a web server using client certificates for authentication. We secured our /restricted folder with an Apache configuration file [a], while PHP code [b] was used to secure the /admin folder. Our SVP repository uses a .htaccess password file in addition to certificates, and it was set up so that every time something is committed to the repository, the web server is updated [c]. We sat up our CA [d] to sign with SHA256 with a duration of 365 days.
 
 \section{Discussion}
 
 \paragraph{Q1} 
 Comment on security related issues regarding the cryptographic algorithms used to generate and sign your groups web server certi?cate (key length, algorithm, etc.).
 \par
-All the CAs provided by the staff are signed with a SHA1 hash, our CA uses a SHA256 key. Both uses a 2048bit key length and RSA Encryption. SHA1 is no longer recommended to use on digital signatures by NIST\cite{ref1} because of an attack by Xiaoyun Wang/cite reducing the probability of a collision from 2 ^ 80 to 2 ^ 63 \cite{ref3} \cite{ref4}. A key length of 2048 bits is considered secure until 2030 by NIST, 2020 by FNISA\cite{ref5} and BSI\cite{ref6}. The Duration of the certificate is set to 365 days which is within the recommendations set by NIST[8].
+All the CAs provided by the staff are signed with a SHA1 hash, our CA uses a SHA256 key. Both uses a 2048bit key length and RSA Encryption. SHA1 is no longer recommended to use on digital signatures by NIST\cite{ref1} because of an attack by Xiaoyun Wang\cite{ref2} reducing the probability of a collision from 2 ^ 80 to 2 ^ 63 \cite{ref3} \cite{ref4}. A key length of 2048 bits is considered secure until 2030 by NIST, 2020 by FNISA\cite{ref5} and BSI\cite{ref6}. The Duration of the certificate is set to 365 days which is within the recommendations set by NIST.
 
 \paragraph{Q2} 
 Explain what you have achieved through each of these verifcations. What is the name of the person signing the Apache release?
@@ -67,66 +67,6 @@ Some groups forgot to /secure the folder in the HTTP server, which gave us acces
 Kult fag
 \section{Appendices / Appedix}
 Her står det masse fin tekst
-
-\section{Litt notater}
-
-\paragraph{Q1:} 
-Sertifikatet til vår webserver er signerert av vår CA. Den signerer med en SHA256 hash som er mye sikrere enn MD5 (som er er standard), 365 dager varighet på sertfikat
-Key length er 2048 bit, req er også sha256
-
-Key length studca også 2048bit, det står noe om anbefalt key lenght ut fra algoritme i foilene bassert på tall fra NSA, sikkert lurt å sitere det.
-
-
-\paragraph{Q2:} 
-Dette handler om at kildekoden vi laster ned ikke har blitt endret. Sikkert lurt å skrive litt om hvordan PGP (Prety good privacy) fungerer i forhold til CA, er totalt forskjelige tilnærminger til samme problem
-
-
-	
-
-Signert av (ser fornuftig ut i koden):
-\begin{quotation}
-gpg: Signature made Wed 25 Jan 2012 11:27:28 PM CET using RSA key ID 60C5442D
-gpg: Good signature from "William A. Rowe, Jr. <wrowe@rowe-clan.net>"
-gpg:                 aka "William A. Rowe, Jr. <wrowe@apache.org>"
-gpg:                 aka "William A. Rowe, Jr. <wrowe@vmware.com>"
-gpg:                 aka "William A. Rowe, Jr. <william.rowe@springsource.com>"
-gpg: WARNING: This key is not certified with a trusted signature!
-gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: B1B9 6F45 DFBD CCF9 7401  9235 193F 180A B55D 9977
-     Subkey fingerprint: 627B E9D7 D7C6 9D30 A2F5  B008 5593 BCA9 60C5 442D
-\end{quotation}
-
-
-
-\paragraph{Q3:} 
-Webserveren bør helst kjøres av en annen bruker en den som eier konfigurasjonsfilene. Det er ikke mulig for oss i denne laben sidne vi ikke har mulighet til å lage nye brukere. Hvis webserveren har mulighet til å skrive til config filene kan man når man hacker webserven skrive en ny config som åpner nye sikkerhetshull. Våre filer har lese og skriverettigheter til den som eier filene men ingen rettigheter til medlem av gruppa (det har ingenting å si siden i dette oppsettet er vi eneste bruker i gruppen).
-
-
-
-Q5 Ikke sårbar for sessions siden vi ikke bruker det. Sårbar for Cross site scripting, ingenting gjort for å fikse det, ikke sikker på hvordan det funker. 
-Sikret mot SQL Injections (detaljer i tex koden):
-
-%\$username = stripslashes(\$username);
-%\$password = stripslashes(\$password);
-%\$username = mysqli_real_escape_string(\$connection,\$username);
-%\$password = mysqli_real_escape_string(\$connection,\$password);
-
-Hvis noen skulle få tilgang til databasen vår er passord lagret hashet med SHA256 og brukernavn som salt. Salt beskytter mot at alle passordene i databasen kan knekkes samtidig.
-
-
-
-
-
-\paragraph{Q6:}  Subversion repository er sikkret med htaccess fil, passord hashet med SHA, gir ikke ytligere sikring alene (passord alene kan vel regnes som mer usikkert enn sertifikater, er ikke sikker) men hvis man kombinerer det med certifikatsikringen i fra /restricted mappa vil man få to komponent sikring, med noe man har (sertifikat) og noe vet (passord)
-\paragraph{Fra config fil}
-AuthType Basic
-AuthName "Subversion repository"
-AuthUserFile /home/gr10/subversion/repository/conf/svn-auth-file
-Require valid-user
-\paragraph{Sikkerhetshull hos andre grupper:} 
-
-Glemt å blokke /secure mappa i HTTP serveren, da får man tilgang til alt uten sertifikater
-Glemt å sette verify depth til 2 i apache httpd.conf, hvis den står til 4 eller høyere kan man signere sine egne sertifikater med sitt eget group CA og komme inn.
 
 \begin{thebibliography}{99}
 
