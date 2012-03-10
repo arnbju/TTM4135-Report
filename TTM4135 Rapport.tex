@@ -1,76 +1,60 @@
 \documentclass[a4paper, norsk, 11pt]{report}
 \usepackage[latin1]{inputenc}
 \usepackage{babel}
-\usepackage{listings}
-\usepackage{hyperref}
-\usepackage{appendix}
 
 \author{Arne Dahl Bjune, Hanne Riise Mæhlum, Katarina Hokstad}
 \title{TTM4135 Informasjonssikkerhet Rapport\\
 Group 10}
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{2ex}
 
 %\rhead{Topptekst}06.03.2012
 
 
 \begin{document}
 \maketitle
-\tableofcontents
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2ex}
 
 
 \section{Introduction}
-\url{https://www.pcisecuritystandards.org/pdfs/navigating_pci_dss_v1-1.pdf}
-Litt introduksjon og sånn 
+The purpose of this project was to experiment with web server security implementations.
+ 
+The project focuses on security mechanisms in web security software like web servers (Apache), static and dynamic web pages (PHP), browsers and session/application layer security (SSL). This was accomplished by using OpenSSL to create our own certificate authority (CA), which thereafter was used to create a signed certificate and private key for our Apache web server. To secure the web server it was necessary to change the configurations and implement client certificate authentication on our Apache web server. To validate clients we wrote a web site in PHP which used username, password and X.509 certificates. Finally, we used the Apache server to set up a Subversion Repository (SVN).
 \section{Experimental Procedure}
 Her eksprimenterte vi med masse rart
-\section{Results} 
-Funka bra! ~[\ref{appa}] 
+\section{Results}
+Funka bra!
 \section{Discussion}
 
 \paragraph{Q1} 
-Comment on security related issues regarding the cryptographic algorithms used to
+Q1. Comment on security related issues regarding the cryptographic algorithms used to
 generate and sign your groups web server certi?cate (key length, algorithm, etc.).
 \par
-All the CAs provided by the staff are signed with a SHA1 hash, our ca uses a SHA256 key. Both uses a 2048bit key length. SHA1 is no longer recommended to use on digital signatures by NIST[4] because of an attack by Xiaoyun Wang[1] reducing the probability of a collision from 2 ^ 80 to 2 ^ 63 [2][3]. A key length of 2048 bits is considered secure until 2030 by NIST[5], 2020 by FNISA[6] and BSI[7]. The Durotation of the certificate is set to 365 days which is within the recommendations set by NIST[8].
-
-[1] Finding Collisions in the Full SHA-1Collision Search Attacks on SHA1
-	http://people.csail.mit.edu/yiqun/SHA1AttackProceedingVersion.pdf
-[2] http://www.schneier.com/blog/archives/2005/08/new_cryptanalyt.html	Droppe?, bruke [3]?
-[3] http://csrc.nist.gov/groups/ST/hash/statement.html
-[4] http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html
-[5] Trenger bedre ref en dette: http://www.keylength.com/en/
-[6] Trenger bedre ref en dette: http://www.keylength.com/en/
-[7] Trenger bedre ref en dette: http://www.keylength.com/en/
-[8]
-
-
+All the CAs provided by the staff are signed with a SHA1 hash, our CA uses a SHA256 key. Both uses a 2048bit key length and RSA Encryption. SHA1 is no longer recommended to use on digital signatures by NIST\cite{ref1} because of an attack by Xiaoyun Wang/cite reducing the probability of a collision from 2 ^ 80 to 2 ^ 63 \cite{ref3} \cite{ref4}. A key length of 2048 bits is considered secure until 2030 by NIST, 2020 by FNISA\cite{ref5} and BSI\cite{ref6}. The Duration of the certificate is set to 365 days which is within the recommendations set by NIST[8].
 
 \paragraph{Q2} 
-Explain what you have achieved through each of these verifcations. What is the name
-of the person signing the Apache release?
+Explain what you have achieved through each of these verifcations. What is the name of the person signing the Apache release?
 \par
-Pretty Good Privacy (PGP) is a computer program that encrypt and decrypt data. It gives a  confidentiality and authentication service. The first version of this program was a web of trust system.
+By verifying the source code with the PGP\cite{ref7} program we ensure that the source code is the original code and that no one has tampered with it. The PGP program uses a private key and a public key. The private key is kept by the person wishing to authenticate it self and the public key is given to the people he wants to authenticate him self to. The sender signs a hash with the private key. When an other person receives the data he can use the public key to check that the person is who he claims to be. 
 \par
-By verifying the source code whit the PGP program we ensure that the source code is the original code and that no one has tampered with it. The PGP program uses a private key and a public key. The private key is kept by the person wishing to authenticate it self and the public key is given to the people he wants to authenticate him self to. The sender signs a hash whit the private key. When an other person receives the data he can use the public key to check that the person is who he claims to be. 
+PGP uses web of trust to ensure that the person signing the Apache release is who he clams to be. We downloaded the public key from MIT and Apache\cite{ref8} to, the source code from mirrorservice.nomedia.no and the signature fil from Apache. PGP utilize Web of Trust as opposed to X509\cite{ref9} hierarchy model. Since we don’t have a complete path from us to the person signing the release we cannot guarantee its authenticity. But with public keys from both MIT and Apache matching the probability is good enough.
 \par
-PGP uses web of trust to ensure that the person signing the Aparch release is who he clams to be. A web of trust is a network were .
+When using web of trust the Apache release is signed by other people knowing the public key. This people can authenticate that the Apache release is real. And if someone we trust signs the release we trust the Apache release.  The release was signed by William A. Rowe, Jr.
+
 \paragraph{Q3}
-What are the access permissions to your web server’s con?guration ?les, server certi?cate
+Q3. What are the access permissions to your web server’s con?guration ?les, server certi?cate
 and the corresponding private key? Comment on possible attacks to your web server due to
 inappropriate ?le permissions
 \par
 The web server should preferably be run by a user other than the one that owns the configuration files. This is not possible for us in this lab, since we don’t have the ability to create new users. If the web server has the opportunity to write to the configuration files, you can write a new configuration file that opens new security holes if you’re hacking into the web server. Our files have read and write access to the owner of the file, but no rights to the members of the group. However, this has nothing to say in this setup since we’re the only user in the group.
+
 \paragraph{Q4}
-Web servers o?ering weak cryptography are subject to several attacks. What kind of attacks are feasible? How did you con?gure your server to prevent such attacks?
+Q4. Web servers o?ering weak cryptography are subject to several attacks. What kind of
+attacks are feasible? How did you con?gure your server to prevent such attacks?
 \par
-By allowing weak ciphers and SSLv2 you are vulnerable to Man In The Middle Attack where the attacker changes the content of the Client Hello package. On our server we are only allowing SSLv3 and TLSv1 protocols with HIGH and MEDIUM ciphers as requried by PCI DSS [9] (Payment Card Industry Data Security Standarad)
-\par
-[9] https://www.pcisecuritystandards.org/pdfs/navigating_pci_dss_v1-1.pdf
+By allowing weak ciphers and SSLv2 you are vulnerable to Man In The Middle Attack where the attacker changes the content of the Client Hello package. On our server we are only allowing SSLv3 and TLSv1 protocols with HIGH and MEDIUM ciphers as requried by PCI DSS\cite{ref10} (Payment Card Industry Data Security Standarad)
 
 \paragraph{Q5}
-What kind of malicious attacks is your web application (PHP) vulnerable to? Describe them brie?y, and point out what countermeasures you have developed in your code to prevent such attacks
+Q5. What kind of malicious attacks is your web application (PHP) vulnerable to? Describethem briefly, and point out what countermeasures you have developed in your code to prevent such attacks.
 \par
 Our web application is not vulnerable for sessions, since we’re not using it. Cross site scripting is avoided by using strip_tags in PHP on all user input. We have secured our web application against SQL injections, by using stripslashes and mysqli_real_escape_string commands in PHP on all input to databases. 
 
@@ -87,21 +71,8 @@ X.509: RFC4158 http://tools.ietf.org/html/rfc4158
 
 \section{Conclusion}
 Kult fag
-
-\newpage
-\appendix
-\appendixpage
-
-\section{OpenSSL CA Config} \label{appa}
-\input{caconf}
-
-\section{Singup PHP} \label{appb}
-\input{signup}
-
-\section{Apache Group Config} \label{appb}
-\input{group}
-
-
+\section{Appendices / Appedix}
+Her står det masse fin tekst
 
 \section{Litt notater}
 
@@ -163,5 +134,49 @@ Require valid-user
 Glemt å blokke /secure mappa i HTTP serveren, da får man tilgang til alt uten sertifikater
 Glemt å sette verify depth til 2 i apache httpd.conf, hvis den står til 4 eller høyere kan man signere sine egne sertifikater med sitt eget group CA og komme inn.
 
+\begin{thebibliography}{99}
+
+	 	\bibitem{ref1}
+	 	Secure Hashing 
+	 	\\ \url{http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html}
+
+	  \bibitem{ref2}
+		Xiaoyun Wang, Yiqun Lisa Yin and Hongbo Yu,
+	  Finding Collisions in the Full SHA-1Collision Search Attacks on SHA1
+	  \\ \url{http://people.csail.mit.edu/yiqun/SHA1AttackProceedingVersion.pdf}
+	  
+	  \bibitem{ref3}
+	 	SHA1 Collisions can be Found in 6 63 Operations 
+	 	\\ \url{https://www.rsa.com/rsalabs/node.asp?id=2927}
+	 	
+	 	\bibitem{ref4}
+	 	Nist Comments on Cryptanalytic Attaks on SHA-1
+	 	\\ \url{http://csrc.nist.gov/groups/ST/hash/statement.htm}
+	 		 	
+	 	\bibitem{ref5}
+	 	R´ef´erentiel G´en´eral de S´ecurit´
+	 	\\ \url{http://www.ssi.gouv.fr/IMG/pdf/RGS_B_1.pdf}
+	 	
+	 	\bibitem{ref6}
+	 	Bundesnetzagentur für Elektrizität, Gas, Telekommunikation, Post und Eisenbahnen
+	 	\\ \url{http://www.bundesnetzagentur.de/SharedDocs/Downloads/DE/BNetzA/Sachgebiete/QES/Veroeffentlichungen/Algorithmen/2011_2_AlgoKatpdf.pdf?__blob=publicationFile}
+	 	
+	 	\bibitem{ref7}
+	 	RFC4880 
+	 	\\ \url{http://tools.ietf.org/html/rfc4880}
+
+		\bibitem{ref8}
+	 	Apache Developers Public Keys
+	 	\\ \url{https://www.apache.org/dist/httpd/KEYS}
+	 	
+		\bibitem{ref9}
+	 	RFC4158 
+	 	\\ \url{http://tools.ietf.org/html/rfc4158}
+	 	
+	 	\bibitem{ref10}
+	 	Understanding the Intent of the Requirements
+	 	\\ \url{https://www.pcisecuritystandards.org/pdfs/navigating_pci_dss_v1-1.pdf}	
+
+\end{thebibliography}
 
 \end{document}
