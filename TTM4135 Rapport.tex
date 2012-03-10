@@ -1,9 +1,13 @@
 \documentclass[a4paper, norsk, 11pt]{report}
 \usepackage[latin1]{inputenc}
 \usepackage{babel}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{appendix}
 
 \author{Arne Dahl Bjune, Hanne Riise Mæhlum, Katarina Hokstad}
-\title{TTM4135 Informasjonssikkerhet Rapport}
+\title{TTM4135 Informasjonssikkerhet Rapport\\
+Group 10}
 
 %\rhead{Topptekst}06.03.2012
 
@@ -15,11 +19,10 @@
 
 
 \section{Introduction}
+\url{https://www.pcisecuritystandards.org/pdfs/navigating_pci_dss_v1-1.pdf}
 Litt introduksjon og sånn
-\section{Experimental}
+\section{Experimental Procedure}
 Her eksprimenterte vi med masse rart
-\section{Procedure}
-Dette var litt foskjelig
 \section{Results}
 Funka bra!
 \section{Discussion}
@@ -82,8 +85,100 @@ X.509: RFC4158 http://tools.ietf.org/html/rfc4158
 
 \section{Conclusion}
 Kult fag
-\section{Appendices}
-Her står det masse fin tekst
+
+\newpage
+\appendix
+\appendixpage
+
+\section{OpenSSL CA Config}
+\begin{lstlisting}
+
+# OpenSSL configuration file.
+
+# Establish working directory.
+
+dir			= .
+
+[ ca ]
+default_ca		= CA_default
+
+[ CA_default ]
+serial			= $dir/serial
+database		= $dir/index.txt
+new_certs_dir		= $dir/newcerts
+certificate		= $dir/cacert.pem
+private_key		= $dir/cakey.key
+default_days		= 365
+default_md		= sha256
+preserve		= no
+email_in_dn		= no
+nameopt			= default_ca
+certopt			= default_ca
+policy			= policy_match
+ca_extensions		= server_cert
+
+[ policy_match ]
+countryName		= match
+organizationName	= match
+organizationalUnitName	= match
+commonName		= supplied
+
+
+[ req ]
+default_bits		= 2048		# Size of keys
+default_keyfile		= key.pem	# name of generated keys
+default_md		= sha256	# message digest algorithm
+string_mask		= utf8only	# permitted characters
+distinguished_name	= req_distinguished_name
+req_extensions		= v3_req
+
+[ req_distinguished_name ]
+# Variable name		  Prompt string
+#----------------------	  ----------------------------------
+0.organizationName	= Organization Name (company)
+organizationalUnitName	= Department
+countryName		= Country Name (2 letter code)
+countryName_min		= 2
+countryName_max		= 2
+commonName		= Common Name (stud.ntnu.no mailadress)
+commonName_max		= 64
+
+# Default values for the above, for consistency and less typing.
+# Variable name			  Value
+#------------------------------	  ------------------------------
+0.organizationName_default	= NORGES TEKNISK-NATURVITENSKAPELIGE \
+				UNIVERSITET NTNU
+organizationalUnitName_default	= Telematics
+countryName_default		= NO
+
+[ v3_ca ]
+basicConstraints	= CA:TRUE
+subjectKeyIdentifier	= hash
+authorityKeyIdentifier	= keyid:always,issuer:always
+
+[ v3_req ]
+basicConstraints	= CA:FALSE
+subjectKeyIdentifier	= hash
+
+[ server_cert ] # to sign the Apache CSR
+basicConstraints	= critical, CA:FALSE
+subjectKeyIdentifier	= hash
+keyUsage		= digitalSignature, keyEncipherment
+nsCertType		= server
+
+
+
+\end{lstlisting}
+
+\section{Appendix Second}
+ppendix second content.
+
+
+
+\begin{lstlisting}
+	\lstinputlisting{signup.php}
+\end{lstlisting}
+
 
 \section{Litt notater}
 
