@@ -2,7 +2,6 @@
 \usepackage[latin1]{inputenc}
 \usepackage{babel}
 
-
 \author{Arne Dahl Bjune, Hanne Riise Mæhlum, Katarina Hokstad}
 \title{TTM4135 Informasjonssikkerhet Rapport\\
 Group 10}
@@ -20,15 +19,14 @@ Group 10}
 The purpose of this project was to experiment with web server security implementations.
  
 The project focuses on security mechanisms in web security software like web servers (Apache), static and dynamic web pages (PHP), browsers and session/application layer security (SSL). This was accomplished by using OpenSSL to create our own certificate authority (CA), which thereafter was used to create a signed certificate and private key for our Apache web server. To secure the web server it was necessary to change the configurations and implement client certificate authentication on our Apache web server. To validate clients we wrote a web site in PHP which used username, password and X.509 certificates. Finally, we used the Apache server to set up a Subversion Repository (SVN).
-\section{Experimental Procedure}
-Her eksprimenterte vi med masse rart
+
 \section{Results}
 Funka bra!
+
 \section{Discussion}
 
 \paragraph{Q1} 
-Q1. Comment on security related issues regarding the cryptographic algorithms used to
-generate and sign your groups web server certi?cate (key length, algorithm, etc.).
+Comment on security related issues regarding the cryptographic algorithms used to generate and sign your groups web server certi?cate (key length, algorithm, etc.).
 \par
 All the CAs provided by the staff are signed with a SHA1 hash, our CA uses a SHA256 key. Both uses a 2048bit key length and RSA Encryption. SHA1 is no longer recommended to use on digital signatures by NIST\cite{ref1} because of an attack by Xiaoyun Wang/cite reducing the probability of a collision from 2 ^ 80 to 2 ^ 63 \cite{ref3} \cite{ref4}. A key length of 2048 bits is considered secure until 2030 by NIST, 2020 by FNISA\cite{ref5} and BSI\cite{ref6}. The Duration of the certificate is set to 365 days which is within the recommendations set by NIST[8].
 
@@ -42,20 +40,19 @@ PGP uses web of trust to ensure that the person signing the Apache release is wh
 When using web of trust the Apache release is signed by other people knowing the public key. This people can authenticate that the Apache release is real. And if someone we trust signs the release we trust the Apache release.  The release was signed by William A. Rowe, Jr.
 
 \paragraph{Q3}
-Q3. What are the access permissions to your web server’s con?guration ?les, server certi?cate
+What are the access permissions to your web server’s configuration files, server certificate
 and the corresponding private key? Comment on possible attacks to your web server due to
-inappropriate ?le permissions
+inappropriate file permissions.
 \par
 The web server should preferably be run by a user other than the one that owns the configuration files. This is not possible for us in this lab, since we don’t have the ability to create new users. If the web server has the opportunity to write to the configuration files, you can write a new configuration file that opens new security holes if you’re hacking into the web server. Our files have read and write access to the owner of the file, but no rights to the members of the group. However, this has nothing to say in this setup since we’re the only user in the group.
 
 \paragraph{Q4}
-Q4. Web servers o?ering weak cryptography are subject to several attacks. What kind of
-attacks are feasible? How did you con?gure your server to prevent such attacks?
+Web servers offering weak cryptography are subject to several attacks. What kind of attacks are feasible? How did you configure your server to prevent such attacks?
 \par
 By allowing weak ciphers and SSLv2 you are vulnerable to Man In The Middle Attack where the attacker changes the content of the Client Hello package. On our server we are only allowing SSLv3 and TLSv1 protocols with HIGH and MEDIUM ciphers as requried by PCI DSS\cite{ref10} (Payment Card Industry Data Security Standarad)
 
 \paragraph{Q5}
-Q5. What kind of malicious attacks is your web application (PHP) vulnerable to? Describethem briefly, and point out what countermeasures you have developed in your code to prevent such attacks.
+What kind of malicious attacks is your web application (PHP) vulnerable to? Describethem briefly, and point out what countermeasures you have developed in your code to prevent such attacks.
 \par
 Our web application is not vulnerable for sessions, since we’re not using it. Cross site scripting is avoided by using strip_tags in PHP on all user input. We have secured our web application against SQL injections, by using stripslashes and mysqli_real_escape_string commands in PHP on all input to databases. 
 
@@ -65,10 +62,6 @@ Describe the security measures you have undertaken to secure your repository, an
 We’ve secured our subversion repository with htcaccess I, and the password is hashed with SHA. This doesn’t give further security alone, but combined with certificates from the /restricted folder you’ll get two component protection with something you got and something you know, certificate and password respectively. 
 \par
 Some groups forgot to /secure the folder in the HTTP server, which gave us access to everything without certificates. Others forgot to set verify depth to 2 in apache http.conf. If it’s set to 4 or higher, which was the case for these groups, you can sign your own certificates with your own groups CA with their email as common name to gain access. 
-\par
-Referanser:
-PGP: RFC4880 http://tools.ietf.org/html/rfc4880
-X.509: RFC4158 http://tools.ietf.org/html/rfc4158
 
 \section{Conclusion}
 Kult fag
